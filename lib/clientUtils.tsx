@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MobileDetect from 'mobile-detect'
 
 // function isOnMobileDevice() {
@@ -15,9 +15,15 @@ interface MobilePreventProviderProps {
 
 export default function MobilePreventProvider({ children } : MobilePreventProviderProps) {
 
-    const md = new MobileDetect(window.navigator.userAgent)
+    const [isMobile, setIsMobile] = useState<string | null>(null)
 
-    if (md.mobile()) {
+    useEffect(() => {
+        const md = new MobileDetect(window.navigator.userAgent)
+        setIsMobile(md.mobile())
+    }, [])
+
+
+    if (isMobile) {
         return (
             <div className="h-screen w-screen flex justify-center items-center">
                 <h1>Mohon maaf, web ini masih belum kompatibel dengan perangkat mobile</h1>
