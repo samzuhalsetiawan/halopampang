@@ -21,7 +21,7 @@ export default function Navbar({ className }: NavbarProps = { className: "" }) {
                         <Link href={'/informasi'}>Informasi</Link>
                     </li>
                     <li className="hover:text-sky-500 py-3 cursor-pointer transition border-b border-b-transparent hover:border-b hover:border-b-sky-500" key={'beranda'}>
-                        <Link href={'/toko'}>Toko</Link>
+                        <Link href={'/toko/umkm'}>Toko</Link>
                     </li>
                     <li className="hover:text-sky-500 py-3 cursor-pointer transition border-b border-b-transparent hover:border-b hover:border-b-sky-500" key={'beranda'}>
                         <Link href={'/tentang'}>Tentang</Link>
