@@ -2,14 +2,15 @@ import path from 'path'
 import { google } from 'googleapis'
 import { authenticate } from '@google-cloud/local-auth'
 import { NextResponse } from 'next/server';
+import getConfig from 'next/config';
 
 export async function GET(req: Request) {
 
     try {
         const formID = "19aFPBCL0IiLPdWdmO5Qcp1-sET4CRt-yoI_YZ-A_ttU"
-
+        const { serverRuntimeConfig } = getConfig()
         const auth = await authenticate({
-            keyfilePath: path.join(__dirname, 'credentials.json'),
+            keyfilePath: path.join(serverRuntimeConfig.PROJECT_ROOT, 'credentials.json'),
             scopes: 'https://www.googleapis.com/auth/forms.body.readonly',
         });
         const forms = google.forms({
