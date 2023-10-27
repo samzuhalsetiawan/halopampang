@@ -1,20 +1,21 @@
 import { Separator } from "@/components/ui/separator"
 import { AddProductForm } from "./add-form"
 import { cn } from "@/lib/utils"
+import { TokoSection } from "@/types"
 
-interface AddProductProps {
+interface AdminTokoSectionProps {
     className?: string,
-    operation: string
+    section: TokoSection
 }
 
-export const AddProduct = ({ className = "", operation }: AddProductProps) => {
+export const AdminTokoSection = ({ className = "", section }: AdminTokoSectionProps) => {
     return (
         <div className={cn("space-y-6", className)}>
         <div>
             <h3 className="text-lg font-medium">
-                {operation == "add" && (<>Tambahkan Produk/Jasa</>)}
-                {operation == "delete" && (<>Hapus Produk/Jasa</>)}
-                {operation == "edit" && (<>Edit Produk/Jasa</>)}
+                {section == "ADMIN/ADD" && (<>Tambahkan Produk/Jasa</>)}
+                {section == "ADMIN/DELETE" && (<>Hapus Produk/Jasa</>)}
+                {section == "ADMIN/EDIT" && (<>Edit Produk/Jasa</>)}
             </h3>
             <p className="text-sm text-muted-foreground">
             This is how others will see you on the site.

@@ -23,7 +23,7 @@ function Card({url}: CarouselCardProps) {
             <p className={style.cardp}>{content}</p> */}
             {/* <img className={style.foto} src="/1.jpg" alt="tes" /> */}
             <div className='h-full w-full relative'>
-              <Image src={url} alt='tes' fill objectFit='cover'/>
+              <Image src={url} alt='tes' fill style={{ 'objectFit': 'cover' }}/>
             </div>
         </div>
     )

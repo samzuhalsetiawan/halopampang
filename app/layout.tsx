@@ -2,9 +2,10 @@ import type { Metadata } from 'next'
 import { Poppins as FontSans } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
-import NavbarWrapper from '@/components/navbar/NavbarWrapper'
 import FooterWrapper from '@/components/footer/FooterWrapper'
 import MobilePreventProvider from '@/lib/clientUtils'
+import AuthProvider from '@/context/AuthProvider'
+import Navbar from '@/components/navbar/Navbar'
 
 export const fontSans = FontSans({
   weight: "400",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {
@@ -29,11 +30,13 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}>
-          <MobilePreventProvider>
-            <NavbarWrapper />
-            {children}
-            <FooterWrapper />
-          </MobilePreventProvider>
+          <AuthProvider>
+            <MobilePreventProvider>
+              <Navbar className='fixed z-50' />
+              {children}
+              <FooterWrapper />
+            </MobilePreventProvider>
+          </AuthProvider>
         </body>
     </html>
   )

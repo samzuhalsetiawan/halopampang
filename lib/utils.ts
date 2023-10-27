@@ -1,5 +1,6 @@
-import { Product, User } from "@/types"
+import { Product } from "@/types"
 import { type ClassValue, clsx } from "clsx"
+import { User } from "next-auth"
 import { twMerge } from "tailwind-merge"
  
 export function cn(...inputs: ClassValue[]) {
@@ -21,8 +22,22 @@ export function getDummyProduct(): Product {
 
 export function getDummyUser(): User {
   return {
-    name: "Username",
+    username: "Username",
     phoneNumber: "081234567890",
-    profilePictureUrl: "/default_user_icon.png"
+    profilePicture: "/default_user_icon.png",
+    id: "id",
+    uid: "id",
   }
+}
+
+type DebugLevel = "DEBUG" | "ERROR"
+
+export function debug(title: string, data: any, level: DebugLevel = "DEBUG") {
+  console.log(`===START ${title}===`)
+  if (level === "ERROR") {
+    console.error(data)
+  } else {
+    console.log(data)  
+  }
+  console.log(`===END ${title}===`)
 }
