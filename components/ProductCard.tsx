@@ -19,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <Card className="h-[28rem] w-64 overflow-hidden group cursor-pointer">
                     <CardContent className="p-0">
                         <div className="h-64 w-full relative overflow-hidden">
-                            <Image className="group-hover:scale-110 transition duration-700" objectFit="cover" src={product.imageUrls[0]} alt={`foto produk ${product.name}`} fill />
+                            <Image className="group-hover:scale-110 transition duration-700" style={{ 'objectFit': 'cover' }} src={product.imageUrls[0]} alt={`foto produk ${product.name}`} fill />
                         </div>
                     </CardContent>
                     <CardFooter>

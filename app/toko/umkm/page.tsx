@@ -6,7 +6,7 @@ export default async function TokoUMKMPage() {
     let dto = []
 
     try {
-        const response = await fetch(`${process.env.BASE_URL}/api/product?type=umkm`)
+        const response = await fetch(`${process.env.BASE_URL}/api/product?type=umkm`, { cache: 'no-cache' })
         const result = await response.json()
         if (result.error) throw new Error(result.errorMessage)
         dto = result.data

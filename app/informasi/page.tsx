@@ -14,7 +14,7 @@ export default async function InformasiPage() {
 
     const session = await getServerSession(authOptions)
 
-    const response = await fetch(`${process.env.BASE_URL}/api/information`)
+    const response = await fetch(`${process.env.BASE_URL}/api/information`, { cache: 'no-cache' })
     const  informations: { data: GetInformationsDto[] } = await response.json()
 
     return (

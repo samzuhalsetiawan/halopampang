@@ -6,7 +6,6 @@ import { Sidebar } from "@/components/sidebar"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/options"
 import { TokoSection } from "@/types"
-import { redirect } from "next/navigation"
 
 interface TokoPageProps {
   children: React.ReactNode,
@@ -15,7 +14,6 @@ interface TokoPageProps {
 
 export default async function TokoPage({ children, section = "UMKM" }: TokoPageProps) {
 
-  if (!children) redirect(`${process.env.BASE_URL}/toko/umkm`)
   const session = await getServerSession(authOptions)
 
   return (
