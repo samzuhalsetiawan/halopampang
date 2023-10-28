@@ -1,11 +1,9 @@
 "use client"
 
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import * as z from "zod"
-
-import { cn } from "@/lib/utils"
+import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -25,7 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
+import { useRef, useState } from "react"
+import { sendAllPictureToServer } from "@/lib/media-upload"
+import { useRouter } from "next/navigation"
 
 const profileFormSchema = z.object({
   productName: z
@@ -53,14 +53,7 @@ const profileFormSchema = z.object({
     .any(),
   description: z.string({
     required_error: "Deskripsi produk perlu diisi"
-  }),
-//   urls: z
-//     .array(
-//       z.object({
-//         value: z.string().url({ message: "Please enter a valid URL." }),
-//       })
-//     )
-//     .optional(),
+  })
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -68,34 +61,72 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 // This can come from your database or API.
 const defaultValues: Partial<ProfileFormValues> = {
   productType: "umkm"
-//   urls: [
-//     { value: "https://shadcn.com" },
-//     { value: "http://twitter.com/shadcn" },
-//   ],
 }
 
-export function AddProductForm() {
+interface AddProductFormProps {
+  userId: string
+}
+
+export function AddProductForm({ userId }: AddProductFormProps) {
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   })
+  const pictureInputRef = useRef<HTMLInputElement | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
-//   const { fields, append } = useFieldArray({
-//     name: "urls",
-//     control: form.control,
-//   })
+  async function onSubmit(data: ProfileFormValues) {
+    setIsLoading(true)
+    const files = pictureInputRef.current?.files
 
-  function onSubmit(data: ProfileFormValues) {
-    console.log(data)
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
+    if (files && files.length > 0) {
+      try {
+        const urls = await sendAllPictureToServer(files)
+        const productName = data.productName
+        const stock = parseInt(data.stock)
+        const price = parseInt(data.price)
+        const description = data.description
+        const productType = data.productType
+        const owner = userId
+
+        const response = await fetch('/api/product', {
+          method: "POST",
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ 
+            name: productName,
+            description,
+            images: urls,
+            owner,
+            price,
+            stock,
+            productType
+          })
+        })
+
+        const result = await response.json()
+        if (result.error) throw new Error(result.errorMessage)
+        switch (productType) {
+          case "umkm":
+            router.push('/toko/umkm')
+            break;
+          case "merchandise":
+            router.push('/toko/merchandise')
+            break;
+            default:
+            router.push('/toko')
+            break;
+        }
+      } catch (error: any) {
+        console.error(error)
+        alert(error.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
   }
 
   return (
@@ -108,12 +139,8 @@ export function AddProductForm() {
             <FormItem>
               <FormLabel>Nama Produk</FormLabel>
               <FormControl>
-                <Input placeholder="Kerajinan khas pampang..." {...field} />
+                <Input disabled={isLoading} placeholder="Kerajinan khas pampang..." {...field} />
               </FormControl>
-              {/* <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -124,7 +151,7 @@ export function AddProductForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Jenis Produk</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select disabled={isLoading} onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Pilih Jenis Produk..." />
@@ -134,13 +161,8 @@ export function AddProductForm() {
                   <SelectItem value="umkm">Produk UMKM</SelectItem>
                   <SelectItem value="merchandise">Merchandise</SelectItem>
                   <SelectItem value="jasa" disabled>Jasa (Comming Soon)</SelectItem>
-                  {/* <SelectItem value="m@support.com">Jasa</SelectItem> */}
                 </SelectContent>
               </Select>
-              {/* <FormDescription>
-                You can manage verified email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -152,7 +174,7 @@ export function AddProductForm() {
             <FormItem>
               <FormLabel>Harga</FormLabel>
               <FormControl>
-                <Input placeholder="0" {...field} />
+                <Input disabled={isLoading} placeholder="0" {...field} />
               </FormControl>
               <FormDescription>
                 Harga dalam nominal rupiah tanpa titik dan koma
@@ -168,11 +190,8 @@ export function AddProductForm() {
             <FormItem>
               <FormLabel>Stok Barang</FormLabel>
               <FormControl>
-                <Input placeholder="0" {...field} />
+                <Input disabled={isLoading} placeholder="0" {...field} />
               </FormControl>
-              {/* <FormDescription>
-                Harga dalam nominal rupiah tanpa titik dan koma
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -184,11 +203,8 @@ export function AddProductForm() {
             <FormItem>
               <FormLabel>Foto produk</FormLabel>
               <FormControl>
-                <Input className="cursor-pointer" accept="image/*" required type="file" />
+                <Input disabled={isLoading} ref={pictureInputRef} multiple className="cursor-pointer" accept="image/*" required type="file" />
               </FormControl>
-              {/* <FormDescription>
-                Harga dalam nominal rupiah tanpa titik dan koma
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -201,52 +217,22 @@ export function AddProductForm() {
               <FormLabel>Deskripsi Produk</FormLabel>
               <FormControl>
                 <Textarea
+                  disabled={isLoading}
                   placeholder="Jelaskan lebih detail mengenai produk anda"
-                  className="resize-none"
+                  className="resize-y"
                   {...field}
                 />
               </FormControl>
-              {/* <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => append({ value: "" })}
-          >
-            Add URL
-          </Button>
-        </div> */}
-        <Button type="submit">Selesai</Button>
+        <Button type="submit" disabled={isLoading}>
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+          Selesai
+        </Button>
       </form>
     </Form>
   )

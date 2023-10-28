@@ -27,11 +27,11 @@ export default function InformationCard({ information }: InformationCardProps) {
             <DialogContent>
                 <h3 className='font-bold'>{information.title}</h3>
                 <div>
-                <NormalCarousel>
-                    {information.urls.map((url, i) => (<img src={url} key={i} />))}
-                </NormalCarousel>
-                <p className='mt-4'>{information.article}</p>
-            </div>
+                    <NormalCarousel>
+                        {information.urls.map((url, i) => (<img src={url} key={i} />))}
+                    </NormalCarousel>
+                    <p className='mt-4'>{information.article}</p>
+                </div>
             </DialogContent>
         </Dialog>
     )

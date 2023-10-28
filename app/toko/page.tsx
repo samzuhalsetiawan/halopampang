@@ -6,7 +6,7 @@ import { Sidebar } from "@/components/sidebar"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/options"
 import { TokoSection } from "@/types"
-import UMKMSection from "@/components/section/umkm"
+import { redirect } from "next/navigation"
 
 interface TokoPageProps {
   children: React.ReactNode,
@@ -15,6 +15,7 @@ interface TokoPageProps {
 
 export default async function TokoPage({ children, section = "UMKM" }: TokoPageProps) {
 
+  if (!children) redirect(`${process.env.BASE_URL}/toko/umkm`)
   const session = await getServerSession(authOptions)
 
   return (
@@ -43,7 +44,7 @@ export default async function TokoPage({ children, section = "UMKM" }: TokoPageP
               <div className="col-span-3 lg:col-span-4 lg:border-l">
                 <div className="h-full px-4 py-6 lg:px-8">
                     <ScrollArea className="h-screen w-full">
-                        {children || <UMKMSection className="mt-32" />}
+                        {children}
                     </ScrollArea>
                 </div>
               </div>

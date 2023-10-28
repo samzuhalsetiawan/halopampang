@@ -36,3 +36,35 @@ export interface GetInformationsDto {
     created_by: string,
     created_at: string
 }
+
+export type ProductType = "umkm" | "merchandise" | string
+
+export interface ProductDto {
+    pid: string,
+    name: string,
+    stock: number,
+    price: number,
+    sold: number,
+    rating: number,
+    description: string,
+    images: string[],
+    owner: string,
+    product_type: ProductType
+}
+
+export interface GetProductWithUserDto {
+    pid: string,
+    name: string,
+    stock: number,
+    price: number,
+    sold: number,
+    rating: number,
+    description: string,
+    images: string[],
+    product_type: ProductType,
+    added_at: string,
+    uid: string,
+    username: string,
+    phone_number: string,
+    profile_picture: string
+}

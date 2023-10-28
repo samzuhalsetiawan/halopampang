@@ -2,11 +2,13 @@ import { AddInformationPostBody } from '@/types'
 import { v4 as uuidV4 } from 'uuid'
 import { sql } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
+import { urlArrayToPostgreArrayString } from '@/lib/utils'
 
 export async function POST(req: Request) {
     try {
         const body: AddInformationPostBody = await req.json()
-        const urls = `{${body.urls.slice(1).reduce((acc, current) => `${acc}, "${current}"`, `"${body.urls[0]}"`)}}`
+        // const urls = `{${body.urls.slice(1).reduce((acc, current) => `${acc}, "${current}"`, `"${body.urls[0]}"`)}}`
+        const urls = urlArrayToPostgreArrayString(body.urls)
         const articleId = uuidV4()
         const result = await sql`insert into informations values (${articleId}, ${body.title}, ${body.article}, ${urls}, ${body.userId});`
         return NextResponse.json({

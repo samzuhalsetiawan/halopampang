@@ -16,10 +16,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useRef, useState } from "react"
-import type { PutBlobResult } from '@vercel/blob';
 import { useRouter } from "next/navigation"
 import { AddInformationPostBody } from "@/types"
 import { Icons } from "@/components/icons"
+import { sendAllPictureToServer } from "@/lib/media-upload"
 
 const informationFormSchema = z.object({
   title: z
@@ -39,29 +39,6 @@ const informationFormSchema = z.object({
 type InformationFormValues = z.infer<typeof informationFormSchema>
 
 const defaultValues: Partial<InformationFormValues> = {}
-
-async function sendAllPictureToServer(files: FileList) {
-    try {
-        const promises: Promise<Response>[] = []
-        for (let i = 0; i < files.length; i++) {
-            const file = files.item(i)
-            if (!file) continue
-            promises.push(
-                fetch('/api/upload', {
-                    method: "POST",
-                    headers: { 'content-type': file.type || 'application/octet-stream'},
-                    body: file
-                })
-            )
-        }
-        const responses = await Promise.all(promises)
-        const putBlobsResults: PutBlobResult[] = await Promise.all(responses.map(response => response.json()))
-        return putBlobsResults.map(blob => blob.url)
-    } catch (error) {
-        console.error(error)
-        return []
-    }
-  }
 
   async function uploadInformation({ userId, title, article, urls }: AddInformationPostBody) {
     try {
