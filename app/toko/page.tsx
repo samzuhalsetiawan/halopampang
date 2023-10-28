@@ -5,7 +5,6 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sidebar } from "@/components/sidebar"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/options"
-import { debug } from "@/lib/utils"
 import { TokoSection } from "@/types"
 import UMKMSection from "@/components/section/umkm"
 
@@ -17,7 +16,6 @@ interface TokoPageProps {
 export default async function TokoPage({ children, section = "UMKM" }: TokoPageProps) {
 
   const session = await getServerSession(authOptions)
-  debug("server session", session)
 
   return (
     <>

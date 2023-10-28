@@ -20,3 +20,19 @@ export interface UserDto {
 }
 
 export type TokoSection = "JASA" | "UMKM" | "MERCHANDISE" | "ADMIN/ADD" | "ADMIN/DELETE" | "ADMIN/EDIT" | "ADMIN/LIST" | "OTHER"
+
+export interface AddInformationPostBody {
+    userId: string,
+    title: string,
+    article: string,
+    urls: string[]
+}
+
+export interface GetInformationsDto {
+    id: string,
+    title: string,
+    article: string,
+    urls: string[],
+    created_by: string,
+    created_at: string
+}
