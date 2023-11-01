@@ -16,7 +16,7 @@ export default async function TokoMerchandisePage() {
 
     return (
         <TokoPage section="MERCHANDISE">
-            <MerchandiseSection productWithUserDto={dto} className="mt-32" />
+            <MerchandiseSection productDto={dto} className="mt-32" />
         </TokoPage>
     )
 }

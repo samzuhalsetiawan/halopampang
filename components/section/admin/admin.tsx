@@ -5,11 +5,10 @@ import { TokoSection } from "@/types"
 
 interface AdminTokoSectionProps {
     className?: string,
-    section: TokoSection,
-    userId: string
+    section: TokoSection
 }
 
-export const AdminTokoSection = async ({ className = "", section, userId }: AdminTokoSectionProps) => {
+export const AdminTokoSection = async ({ className = "", section }: AdminTokoSectionProps) => {
     return (
         <div className={cn("space-y-6", className)}>
         <div>
@@ -18,12 +17,12 @@ export const AdminTokoSection = async ({ className = "", section, userId }: Admi
                 {section == "ADMIN/DELETE" && (<>Hapus Produk/Jasa</>)}
                 {section == "ADMIN/EDIT" && (<>Edit Produk/Jasa</>)}
             </h3>
-            <p className="text-sm text-muted-foreground">
+            {/* <p className="text-sm text-muted-foreground">
             This is how others will see you on the site.
-            </p>
+            </p> */}
         </div>
         <Separator />
-        <AddProductForm userId={userId} />
+        <AddProductForm />
         </div>
     )
 }

@@ -19,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <Card className="h-[28rem] w-64 overflow-hidden group cursor-pointer">
                     <CardContent className="p-0">
                         <div className="h-64 w-full relative overflow-hidden">
-                            <Image className="group-hover:scale-110 transition duration-700" style={{ 'objectFit': 'cover' }} src={product.imageUrls[0]} alt={`foto produk ${product.name}`} fill />
+                            <Image className="group-hover:scale-110 transition duration-700" style={{ 'objectFit': 'cover' }} src={product.imageUrls.at(0) || "/1.jpg"} alt={`foto produk ${product.name}`} fill />
                         </div>
                     </CardContent>
                     <CardFooter>
@@ -27,10 +27,10 @@ export default function ProductCard({ product }: ProductCardProps) {
                             <div className="flex flex-col items-start text-left">
                                 <p className="text-amber-500">Rp.{product.price}</p>
                                 <p className="text-lg mt-1">{product.name}</p>
-                                <p className="text-muted-foreground">{product.owner.username}</p>
+                                <p className="text-muted-foreground">{product.ownerName}</p>
                             </div>
                             <Button asChild>
-                                <Link target="_blank" href={`https://web.whatsapp.com/send?phone=62${product.owner.phoneNumber.substring(1)}&text=Halo%2C+Apakah+produk+berikut+masih+tersedia%3F%0D%0ANama+produk%3A+${product.name}%0D%0AHarga+Produk%3A+Rp.${product.price}`}>Chat penjual</Link>
+                                <Link target="_blank" href={`https://web.whatsapp.com/send?phone=62${product.phoneNumber.substring(1)}&text=Halo%2C+Apakah+produk+berikut+masih+tersedia%3F%0D%0ANama+produk%3A+${product.name}%0D%0AHarga+Produk%3A+Rp.${product.price}`}>Chat penjual</Link>
                             </Button>
                         </div>
                     </CardFooter>
@@ -46,13 +46,13 @@ export default function ProductCard({ product }: ProductCardProps) {
                     <div className="py-3">
                         <p className="text-amber-500">Rp.{product.price}</p>
                         <p className="text-lg mt-1">{product.name}</p>
-                        <p className="text-muted-foreground">{product.owner.username}</p>
+                        <p className="text-muted-foreground">{product.ownerName}</p>
                     </div>
                     <Separator />
                     <p className='mt-4'>{product.description}</p>
                     <div className="mt-5 flex justify-center items-stretch">
                         <Button asChild className="flex-1">
-                            <Link target="_blank" href={`https://web.whatsapp.com/send?phone=62${product.owner.phoneNumber.substring(1)}&text=Halo%2C+Apakah+produk+berikut+masih+tersedia%3F%0D%0ANama+produk%3A+${product.name}%0D%0AHarga+Produk%3A+Rp.${product.price}`}>Chat penjual</Link>
+                            <Link target="_blank" href={`https://web.whatsapp.com/send?phone=62${product.phoneNumber.substring(1)}&text=Halo%2C+Apakah+produk+berikut+masih+tersedia%3F%0D%0ANama+produk%3A+${product.name}%0D%0AHarga+Produk%3A+Rp.${product.price}`}>Chat penjual</Link>
                         </Button>
                     </div>
                 </div>

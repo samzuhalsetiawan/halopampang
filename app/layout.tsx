@@ -6,6 +6,7 @@ import FooterWrapper from '@/components/footer/FooterWrapper'
 import MobilePreventProvider from '@/lib/clientUtils'
 import AuthProvider from '@/context/AuthProvider'
 import Navbar from '@/components/navbar/Navbar'
+import FirebaseProvider from '@/components/firabase-wrapper'
 
 export const fontSans = FontSans({
   weight: "400",
@@ -32,9 +33,11 @@ export default function RootLayout({
         )}>
           <AuthProvider>
             <MobilePreventProvider>
-              <Navbar className='fixed z-50' />
-              {children}
-              <FooterWrapper />
+              <FirebaseProvider>
+                <Navbar className='fixed z-50' />
+                {children}
+                <FooterWrapper />
+              </FirebaseProvider>
             </MobilePreventProvider>
           </AuthProvider>
         </body>

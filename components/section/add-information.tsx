@@ -19,7 +19,8 @@ import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AddInformationPostBody } from "@/types"
 import { Icons } from "@/components/icons"
-import { sendAllPictureToServer } from "@/lib/media-upload"
+import { sendAllPictureToServer, uploadImagesToFirebase } from "@/lib/media-upload"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 
 const informationFormSchema = z.object({
   title: z
@@ -75,15 +76,19 @@ export function AddInformationForm({ userId }: AddInformationFormProps) {
   const pictureInputRef = useRef<HTMLInputElement | null>(null)
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
 
   async function onSubmit(data: InformationFormValues) {
     setIsLoading(true)
     const files = pictureInputRef.current?.files
 
     if (files && files.length > 0) {
-        const urls = await sendAllPictureToServer(files)
+        const urls = await uploadImagesToFirebase(files)
         const result = await uploadInformation({userId, title: data.title, article: data.article, urls})
-        if (result) router.push('/informasi')
+        if (result) {
+          setShowSuccessModal(true)
+          router.push("/informasi")
+        }
         setIsLoading(false)
     }
 
@@ -143,6 +148,13 @@ export function AddInformationForm({ userId }: AddInformationFormProps) {
             Posting
         </Button>
       </form>
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Informasi berhasil diupload!</DialogTitle>
+            </DialogHeader>
+          </DialogContent>
+      </Dialog>
     </Form>
   )
 }

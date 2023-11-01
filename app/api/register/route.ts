@@ -2,13 +2,14 @@ import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { v4 as uuidV4 } from 'uuid';
 import bcrypt from 'bcrypt';
+import { SALT_ROUND } from "@/constants";
 
 export async function POST(req: Request) {
 
     try {
         const { username, phoneNumber, password } = await req.json()
         const generatedUid = uuidV4()
-        const hashedPassword = bcrypt.hashSync(password, 10)
+        const hashedPassword = bcrypt.hashSync(password, SALT_ROUND)
 
         const result = await sql`insert into users values (${generatedUid}, ${username}, ${phoneNumber}, ${hashedPassword});`;
 

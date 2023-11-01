@@ -9,39 +9,9 @@ export async function GET(req: Request) {
     try {
         let result = null
         if (productType) {
-            result = await sql`select
-                products.pid,
-                products.name,
-                products.stock,
-                products.price,
-                products.sold,
-                products.rating,
-                products.description,
-                products.images,
-                products.product_type,
-                products.added_at,
-                users.uid,
-                users.username,
-                users.phone_number,
-                users.profile_picture
-             from products join users on products.owner = users.uid where products.product_type = ${productType}`
+            result = await sql`select * from products where product_type = ${productType}`
         } else {
-            result = await sql`select
-                products.pid,
-                products.name,
-                products.stock,
-                products.price,
-                products.sold,
-                products.rating,
-                products.description,
-                products.images,
-                products.product_type,
-                products.added_at,
-                users.uid,
-                users.username,
-                users.phone_number,
-                users.profile_picture
-             from products join users on products.owner = users.uid`
+            result = await sql`select * from products`
         }
         if (result) {
             return NextResponse.json({
@@ -68,20 +38,22 @@ export async function POST(req: Request) {
             description,
             images,
             name,
-            owner,
+            ownerName: owner_name,
             price,
             productType: product_type,
-            stock
+            stock,
+            phoneNumber: phone_number
         } = await req.json()
         const pid = uuidV4()
         const rating = 0
         const sold = 0
         const urls = urlArrayToPostgreArrayString(images)
+        debug("urls SERVER", urls)
 
         const result = await sql`insert into products (
-            pid, name, stock, price, rating, sold, product_type, description, images, owner
+            pid, name, stock, price, rating, sold, product_type, description, images, owner_name, phone_number
         ) values (
-            ${pid}, ${name}, ${stock}, ${price}, ${rating}, ${sold}, ${product_type}, ${description}, ${urls}, ${owner}
+            ${pid}, ${name}, ${stock}, ${price}, ${rating}, ${sold}, ${product_type}, ${description}, ${urls}, ${owner_name}, ${phone_number}
         );`
 
         if (result) {

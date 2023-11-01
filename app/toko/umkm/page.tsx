@@ -16,7 +16,7 @@ export default async function TokoUMKMPage() {
 
     return (
         <TokoPage section="UMKM">
-            <UMKMSection productWithUserDto={dto} className="mt-32" />
+            <UMKMSection productDto={dto} className="mt-32" />
         </TokoPage>
     )
 }

@@ -11,7 +11,7 @@ export default async function TokoAdminPage() {
 
     return (
         <TokoPage section="ADMIN/ADD">
-            <AdminTokoSection section="ADMIN/ADD" userId={session.user.uid} className="mt-32" />
+            <AdminTokoSection section="ADMIN/ADD" className="mt-32" />
         </TokoPage>
     )
 }

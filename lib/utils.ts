@@ -1,4 +1,4 @@
-import { GetProductWithUserDto, Product, ProductDto } from "@/types"
+import { Product } from "@/types"
 import { type ClassValue, clsx } from "clsx"
 import { User } from "next-auth"
 import { twMerge } from "tailwind-merge"
@@ -16,7 +16,8 @@ export function getDummyProduct(): Product {
     price: "700.000",
     sold: 0,
     stock: 200,
-    owner: dummyUser
+    ownerName: "Username",
+    phoneNumber: "081234567890"
   }
 }
 
@@ -44,23 +45,4 @@ export function debug(title: string, data: any, level: DebugLevel = "DEBUG") {
 
 export function urlArrayToPostgreArrayString(urls: string[]) {
   return `{${urls.slice(1).reduce((acc, current) => `${acc}, "${current}"`, `"${urls[0]}"`)}}`
-}
-
-export function extractProductFromDto(productWithUserDto: GetProductWithUserDto): Product {
-  const user: User = {
-    id: productWithUserDto.uid,
-    uid: productWithUserDto.uid,
-    phoneNumber: productWithUserDto.phone_number,
-    username: productWithUserDto.username,
-    profilePicture: productWithUserDto.profile_picture
-  } 
-  return {
-    description: productWithUserDto.description,
-    imageUrls: productWithUserDto.images,
-    name: productWithUserDto.name,
-    price: productWithUserDto.price + "",
-    sold: productWithUserDto.sold,
-    stock: productWithUserDto.stock,
-    owner: user
-  }
 }

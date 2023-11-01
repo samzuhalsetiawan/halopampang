@@ -2,7 +2,8 @@ import { UserDto } from "@/types";
 import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { sql } from "@vercel/postgres";
-import * as bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt'
+import { debug } from "@/lib/utils";
 
 export const authOptions: NextAuthOptions = {
     pages: {

@@ -1,5 +1,3 @@
-import { User } from "next-auth"
-import { CredentialInput } from "next-auth/providers/index"
 
 export interface Product {
     name: string,
@@ -8,7 +6,8 @@ export interface Product {
     stock: number,
     sold: number,
     imageUrls: string[],
-    owner: User
+    ownerName: string,
+    phoneNumber: string,
 }
 
 export interface UserDto {
@@ -20,6 +19,8 @@ export interface UserDto {
 }
 
 export type TokoSection = "JASA" | "UMKM" | "MERCHANDISE" | "ADMIN/ADD" | "ADMIN/DELETE" | "ADMIN/EDIT" | "ADMIN/LIST" | "OTHER"
+
+export type ProfileSection = "PROFILE" | "SETTINGS"
 
 export interface AddInformationPostBody {
     userId: string,
@@ -48,23 +49,21 @@ export interface ProductDto {
     rating: number,
     description: string,
     images: string[],
-    owner: string,
-    product_type: ProductType
-}
-
-export interface GetProductWithUserDto {
-    pid: string,
-    name: string,
-    stock: number,
-    price: number,
-    sold: number,
-    rating: number,
-    description: string,
-    images: string[],
     product_type: ProductType,
     added_at: string,
-    uid: string,
-    username: string,
+    owner_name: string,
     phone_number: string,
-    profile_picture: string
+}
+
+export function dtoToProduct(productDto: ProductDto): Product {
+    return {
+        description: productDto.description,
+        imageUrls: productDto.images,
+        name: productDto.name,
+        ownerName: productDto.owner_name,
+        phoneNumber: productDto.phone_number,
+        price: productDto.price.toString(),
+        sold: productDto.sold,
+        stock: productDto.sold
+    }
 }

@@ -2,6 +2,7 @@ import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { v4 as uuidV4 } from 'uuid'; 
 
+// TODO: gak kepake, mau diapakan?
 export async function POST(request: Request): Promise<NextResponse> {
     try {
         const file = request.body || ''

@@ -1,5 +1,9 @@
 import { PutBlobResult } from '@vercel/blob'
+import { debug } from './utils'
+import { FirebaseStorage, UploadResult, getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { v4 as uuidV4 } from 'uuid'
 
+// TODO: ga kepake, mau diapakan?
 export async function sendAllPictureToServer(files: FileList) {
     try {
         const promises: Promise<Response>[] = []
@@ -21,4 +25,21 @@ export async function sendAllPictureToServer(files: FileList) {
         console.error(error)
         return []
     }
+  }
+
+  export async function uploadImagesToFirebase(files: FileList) {
+    const storage = (window as any).fbStorage as FirebaseStorage
+    const uploadResultPromises: Promise<UploadResult>[] = []
+    for (let index = 0; index < files.length; index++) {
+        const file = files.item(index)
+        const filename = `${uuidV4()}.${file?.type.split('/')[1]}`
+        const storageRef = ref(storage, `VHgAfQQu0VktlMuJlxwCtmG8PuNYjPondXI/${filename}`)
+        uploadResultPromises.push(uploadBytes(storageRef, file!))
+    }
+    const uploadResults = await Promise.all(uploadResultPromises)
+    const urlPromises: Promise<string>[] = []
+    for (let index = 0; index < uploadResults.length; index++) {
+        urlPromises.push(getDownloadURL(uploadResults[index].ref))
+    }
+    return await Promise.all(urlPromises)
   }

@@ -67,7 +67,7 @@ export function Sidebar({ className, section, user }: SidebarProps) {
             </Button>
           </div>
         </div>
-        { user?.uid && (
+        { user?.uid === process.env.ADMIN_USERID && (
           <div className="px-3 py-2">
             <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
               Administrator
